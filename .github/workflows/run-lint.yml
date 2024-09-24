@@ -1,0 +1,30 @@
+name: Lint
+run-name: ${{ github.actor }} triggered the lint ci
+
+on:
+  push:
+    branches:
+      - '**'
+
+jobs:
+  run-lint:
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 20.17.0
+      - name: Cache node modules
+        uses: actions/cache@v3
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+      - name: lint
+        run: |
+          yarn
+          yarn lint
