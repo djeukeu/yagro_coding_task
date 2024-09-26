@@ -1,20 +1,49 @@
-import { FINISHED_PRODUCT, NOTHING } from './Constant';
+import { FINISHED_PRODUCT, NOTHING, AVAILABLE, PRODUCT_A, PRODUCT_B, READY, ASSEMBLING } from './Constant';
 
 class Worker {
   hands: string = NOTHING;
+  private status = AVAILABLE;
 
   contructor() {}
 
-  assembleProduct(worker: Worker, slot: number, belt: Array<string>) {
-    if (belt[slot] !== NOTHING && worker.hands !== belt[slot] && worker.hands !== FINISHED_PRODUCT) {
-      belt[slot] = NOTHING;
-      worker.hands = FINISHED_PRODUCT;
-    } else if (belt[slot] !== NOTHING && worker.hands === NOTHING) {
-      belt[slot] = NOTHING;
-      worker.hands = belt[slot];
-    } else {
-      //
+  worker_2_turn(_index: number, product: string) {
+    if (this.hands === PRODUCT_A) {
+      if (product === PRODUCT_A || product === NOTHING || product === FINISHED_PRODUCT) {
+        //
+      } else {
+        this.hands = FINISHED_PRODUCT;
+        product = NOTHING;
+        this.status = READY;
+      }
+    } else if (this.hands === PRODUCT_B) {
+      if (product === PRODUCT_B || product === NOTHING || product === FINISHED_PRODUCT) {
+        //
+      } else {
+        this.hands = FINISHED_PRODUCT;
+        product = NOTHING;
+        this.status = READY;
+      }
+    } else if (this.hands === NOTHING) {
+      if (product !== NOTHING) {
+        this.hands = product;
+        product = NOTHING;
+        this.status = ASSEMBLING;
+      }
+    } else if (this.hands === FINISHED_PRODUCT) {
+      if (product === NOTHING) {
+        this.hands = NOTHING;
+        product = FINISHED_PRODUCT;
+        this.status = ASSEMBLING;
+      }
     }
+  }
+
+  getStatus() {
+    return this.status;
+  }
+
+  isAvailable() {
+    return this.status === AVAILABLE;
   }
 }
 

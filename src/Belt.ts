@@ -4,11 +4,20 @@ import { NOTHING, PRODUCT_A, PRODUCT_B } from './Constant';
 
 class Belt {
   slots: Array<string>;
-  private product: string;
 
   constructor(beltLength: number) {
     this.slots = _.fill(Array(beltLength), NOTHING);
-    this.product = this.pickRandomProduct();
+  }
+
+  // moveForward() {
+  //   const lastProduct = this.slots.pop();
+  //   this.slots.unshift(this.pickRandomProduct());
+  //   // console.log('slots :', this.slots);
+  //   return lastProduct;
+  // }
+
+  move() {
+    this.slots.push(this.pickRandomProduct());
   }
 
   private pickRandomProduct() {
@@ -17,9 +26,9 @@ class Belt {
     return item;
   }
 
-  getProduct() {
-    return this.product;
-  }
+  replaceProduct = (index: number, product: string) => {
+    this.slots[index] = product;
+  };
 }
 
 export default Belt;
