@@ -1,5 +1,3 @@
-import _ from 'lodash';
-
 import Belt from './Belt';
 import { FINISHED_PRODUCT, NOTHING, PRODUCT_A, PRODUCT_B, SIMULATION_STEPS, WORKER_PER_SLOT } from './Constant';
 import Worker from './Worker';
@@ -7,79 +5,84 @@ import Worker from './Worker';
 class Factory {
   private conveyorBelt: Belt;
   private workers: Worker[][];
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  finalProducts: any = {
-    PRODUCT_A: 0,
-    PRODUCT_B: 0,
-    FINISHED_PRODUCT: 0,
-    NOTHING: 0,
-  };
+  private finalProducts: Array<string>;
 
   constructor(beltLength: number) {
     this.conveyorBelt = new Belt(beltLength);
     this.workers = Array.from({ length: beltLength }, () =>
       Array.from({ length: WORKER_PER_SLOT }, () => new Worker())
     );
+    this.finalProducts = [];
   }
 
   production() {
     const conveyorBelt = this.conveyorBelt;
-    const slots = conveyorBelt.slots;
     const workers = this.workers;
 
     for (let i = 0; i < SIMULATION_STEPS; i++) {
-      slots.forEach((product) => {
+      conveyorBelt.slots.forEach((slot, index) => {
         workers.forEach((workerPairs) => {
           const worker_1 = workerPairs[0];
           const worker_2 = workerPairs[1];
 
           if (worker_1.hands === PRODUCT_A) {
-            if (product === PRODUCT_A || product === NOTHING || product === FINISHED_PRODUCT) {
-              worker_2.worker_2_turn(i, product);
+            if (slot === PRODUCT_A || slot === NOTHING || slot === FINISHED_PRODUCT) {
+              worker_2.worker_2_turn(i, slot);
             } else {
               worker_1.hands = FINISHED_PRODUCT;
-              product = NOTHING;
+              slot = NOTHING;
             }
           } else if (worker_1.hands === PRODUCT_B) {
-            if (product === PRODUCT_B || product === NOTHING || product === FINISHED_PRODUCT) {
-              worker_2.worker_2_turn(i, product);
+            if (slot === PRODUCT_B || slot === NOTHING || slot === FINISHED_PRODUCT) {
+              worker_2.worker_2_turn(i, slot);
             } else {
               worker_1.hands = FINISHED_PRODUCT;
-              product = NOTHING;
+              slot = NOTHING;
             }
           } else if (worker_1.hands === NOTHING) {
-            if (product !== NOTHING) {
-              worker_1.hands = product;
-              product = NOTHING;
+            if (slot !== NOTHING) {
+              worker_1.hands = slot;
+              slot = NOTHING;
             }
           } else if (worker_1.hands === FINISHED_PRODUCT) {
-            if (product === NOTHING) {
+            if (slot === NOTHING) {
               worker_1.hands = NOTHING;
-              product = FINISHED_PRODUCT;
+              slot = FINISHED_PRODUCT;
             }
           }
         });
-        // console.log(product);
-        this.finalProducts[product] += 1;
+        conveyorBelt.replaceProduct(index, slot);
       });
-      conveyorBelt.move();
+      const lastProduct = conveyorBelt.move();
+      this.finalProducts.push(lastProduct!);
     }
   }
 
-  availableWorker(workers: Worker[]) {
-    const availableWorkers = _.forEach(workers, (worker) => {
-      if (worker.isAvailable()) {
-        return worker;
-      }
-    });
-    if (availableWorkers?.length > 1) {
-      return availableWorkers[_.random(0, availableWorkers.length - 1)];
-    }
-    if (availableWorkers?.length === 1) {
-      return availableWorkers[0];
-    }
-    return;
+  computeFinalProducts() {
+    const productA = this.finalProducts.filter((p) => p === PRODUCT_A);
+    const productB = this.finalProducts.filter((p) => p === PRODUCT_B);
+    const finishProduct = this.finalProducts.filter((p) => p === FINISHED_PRODUCT);
+    return {
+      PRODUCT_A: productA.length,
+      PRODUCT_B: productB.length,
+      FINISHED_PRODUCT: finishProduct.length,
+    };
   }
+
+  // availableWorker(workers: Worker[]) {
+  //   const availableWorkers = _.forEach(workers, (worker) => {
+  //     if (worker.isAvailable()) {
+  //       return worker;
+  //     }
+  //   });
+  //   if (availableWorkers?.length > 1) {
+  //     return availableWorkers[_.random(0, availableWorkers.length - 1)];
+  //   }
+  //   if (availableWorkers?.length === 1) {
+  //     return availableWorkers[0];
+  //   }
+  //   return;
+  // }
 }
 
 export default Factory;

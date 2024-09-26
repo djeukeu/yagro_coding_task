@@ -9,15 +9,10 @@ class Belt {
     this.slots = _.fill(Array(beltLength), NOTHING);
   }
 
-  // moveForward() {
-  //   const lastProduct = this.slots.pop();
-  //   this.slots.unshift(this.pickRandomProduct());
-  //   // console.log('slots :', this.slots);
-  //   return lastProduct;
-  // }
-
   move() {
-    this.slots.push(this.pickRandomProduct());
+    const lastProduct = this.slots.pop();
+    this.slots.unshift(this.pickRandomProduct());
+    return lastProduct;
   }
 
   private pickRandomProduct() {

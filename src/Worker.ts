@@ -1,4 +1,4 @@
-import { FINISHED_PRODUCT, NOTHING, AVAILABLE, PRODUCT_A, PRODUCT_B, READY, ASSEMBLING } from './Constant';
+import { FINISHED_PRODUCT, NOTHING, AVAILABLE, PRODUCT_A, PRODUCT_B } from './Constant';
 
 class Worker {
   hands: string = NOTHING;
@@ -13,7 +13,7 @@ class Worker {
       } else {
         this.hands = FINISHED_PRODUCT;
         product = NOTHING;
-        this.status = READY;
+        // this.status = READY;
       }
     } else if (this.hands === PRODUCT_B) {
       if (product === PRODUCT_B || product === NOTHING || product === FINISHED_PRODUCT) {
@@ -21,19 +21,19 @@ class Worker {
       } else {
         this.hands = FINISHED_PRODUCT;
         product = NOTHING;
-        this.status = READY;
+        // this.status = READY;
       }
     } else if (this.hands === NOTHING) {
       if (product !== NOTHING) {
         this.hands = product;
         product = NOTHING;
-        this.status = ASSEMBLING;
+        // this.status = ASSEMBLING;
       }
     } else if (this.hands === FINISHED_PRODUCT) {
       if (product === NOTHING) {
         this.hands = NOTHING;
         product = FINISHED_PRODUCT;
-        this.status = ASSEMBLING;
+        // this.status = ASSEMBLING;
       }
     }
   }

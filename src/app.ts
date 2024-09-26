@@ -5,4 +5,4 @@ const factory = new Factory(BELT_LENGTH);
 
 factory.production();
 
-console.log(factory.finalProducts);
+console.log(factory.computeFinalProducts());
