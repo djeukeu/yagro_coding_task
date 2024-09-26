@@ -5,6 +5,3 @@ export const FINISHED_PRODUCT = 'FINISHED_PRODUCT';
 export const BELT_LENGTH = 3;
 export const WORKER_PER_SLOT = 2;
 export const SIMULATION_STEPS = 100;
-export const AVAILABLE = 'AVAILABLE';
-export const READY = 'READY';
-export const ASSEMBLING = 'ASSEMBLING';

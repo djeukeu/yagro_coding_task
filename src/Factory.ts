@@ -27,14 +27,14 @@ class Factory {
 
           if (worker_1.hands === PRODUCT_A) {
             if (slot === PRODUCT_A || slot === NOTHING || slot === FINISHED_PRODUCT) {
-              worker_2.worker_2_turn(i, slot);
+              worker_2.assembleProduct(slot);
             } else {
               worker_1.hands = FINISHED_PRODUCT;
               slot = NOTHING;
             }
           } else if (worker_1.hands === PRODUCT_B) {
             if (slot === PRODUCT_B || slot === NOTHING || slot === FINISHED_PRODUCT) {
-              worker_2.worker_2_turn(i, slot);
+              worker_2.assembleProduct(slot);
             } else {
               worker_1.hands = FINISHED_PRODUCT;
               slot = NOTHING;
@@ -68,21 +68,6 @@ class Factory {
       FINISHED_PRODUCT: finishProduct.length,
     };
   }
-
-  // availableWorker(workers: Worker[]) {
-  //   const availableWorkers = _.forEach(workers, (worker) => {
-  //     if (worker.isAvailable()) {
-  //       return worker;
-  //     }
-  //   });
-  //   if (availableWorkers?.length > 1) {
-  //     return availableWorkers[_.random(0, availableWorkers.length - 1)];
-  //   }
-  //   if (availableWorkers?.length === 1) {
-  //     return availableWorkers[0];
-  //   }
-  //   return;
-  // }
 }
 
 export default Factory;
